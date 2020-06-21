@@ -12,7 +12,7 @@ import { Icon } from 'react-native-elements'
 import { colors } from '../../utils/constants'
 
 const UserPage = ({route, navigation}) => {
-    const { fullName, email, profileImage, birthDate} = route.params
+    const { fullName, email, profileImage, birthDate, matchScore} = route.params
 
     const parsedDate = moment(birthDate).format('DD/MM/YYYY')
 
@@ -32,7 +32,7 @@ const UserPage = ({route, navigation}) => {
                 </View>
                 <View style={styles.imageWrap}>
                     <Image source={{ uri: profileImage }} style={styles.profileImage}/>
-                    <Text style={styles.matchLabel}>50% Match</Text>
+                    { matchScore >= 0 && <Text style={styles.matchLabel}>{`${matchScore}% Match`}</Text>}
                 </View>
                 <View style={styles.details}>
                     <Text style={styles.name}>{fullName}</Text>

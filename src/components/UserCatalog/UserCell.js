@@ -8,10 +8,11 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { colors } from '../../utils/constants'
+import { isEmpty } from '../../utils/general'
 
-const UserCell = ({user, openUserPage, editUserPage}) => {
-    const { fullName, email, profileImage} = user
-
+const UserCell = ({user, openUserPage, editUserPage, selectUserAction, selectUser}) => {
+    const { fullName, email, profileImage, id, matchScore} = user
+    
     return (
         <View style={styles.container}>
             <View style={styles.inner}>
@@ -38,6 +39,19 @@ const UserCell = ({user, openUserPage, editUserPage}) => {
                     <Text style={styles.name}>{fullName}</Text>
                     <Text style={styles.email}>{email}</Text>
                 </View>
+                <TouchableOpacity 
+                    style={styles.matchingWrap} 
+                    disabled={!isEmpty(selectUser) && id == selectUser.id}
+                    onPress={selectUserAction}
+                >
+                    <Icon 
+                        name='favorite' 
+                        color={!isEmpty(selectUser) && id == selectUser.id ? colors.grey : matchScore >= 0 ? colors.red : colors.black}
+                        type='material'
+                        size={75}
+                    />
+                    { matchScore >= 0 && <Text style={styles.matchScoreText}>{`${matchScore}%`}</Text> }
+                </TouchableOpacity>
             </View>
         </View>
     )
@@ -90,6 +104,22 @@ const styles = StyleSheet.create({
     email:{
         fontSize: 16,
         color: colors.black,
+    },
+    matchingWrap:{
+        position: "absolute",
+        zIndex: 5,
+        top: 5,
+        left: 5,
+        width: 80,
+        height: 80,
+        padding: 5,
+    },
+    matchScoreText:{
+        position: "absolute",
+        zIndex:10, 
+        top: 30,
+        left: 33,
+        color: colors.white,
     }
 })
 

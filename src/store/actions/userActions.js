@@ -48,9 +48,21 @@ const deleteUser = index => async dispatch => {
   }
 }
 
+const selectUser = index => async dispatch => {
+  try {
+    dispatch({
+      type: USER.SELECT_USER,
+      payload: index,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export {
   createUser,
   createRandomUser,
   updateUser,
   deleteUser,
+  selectUser,
 }

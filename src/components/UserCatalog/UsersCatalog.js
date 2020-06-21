@@ -11,13 +11,15 @@ import UserCell from './UserCell'
 import { colors } from '../../utils/constants'
 import WithUser from '../../HOC/WithUser'
 
-const UsersCatalog = ({ actions, navigation, users }) => {
+const UsersCatalog = ({ actions, navigation, users, selectUser }) => {
 
     const renderCell = ({ item, index }) => {
         return <UserCell 
                     user={item} 
                     openUserPage={()=>{navigation.navigate('UserPage', item)}}
                     editUserPage={() => {navigation.navigate('AddEditPage', {...item, userIndex:index})}}
+                    selectUserAction={()=>actions.selectUser(index)}
+                    selectUser={selectUser}
                 />
     }
 

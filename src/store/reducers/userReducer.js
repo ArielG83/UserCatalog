@@ -1,11 +1,23 @@
 import { USER } from '../consts'
-import { genrateUUID } from '../../utils/general'
+import { genrateUUID, isEmpty } from '../../utils/general'
+import { matchScore } from '../../utils/matching'
 
 const initialState = {
-  users: []
+  users: [],
+  selectUser: {},
 }
 
-const parseUser = originalUser => {
+const parseUser = (newUser, selectUser) => {
+  const { birthDate, fullName, id } = newUser
+  return {
+    ...newUser,
+    id: id ? id : genrateUUID(),
+    age: calculateAge(birthDate),
+    matchScore: isEmpty(selectUser) ? -1 : matchScore({fullName, age }, selectUser )
+  }
+}
+
+const parseRandomUser = (originalUser, selectUser) => {
   const {login: {uuid}, name: {first, last}, email, dob: { date, age }, gender, picture: { large }} = originalUser
 
   return  {
@@ -16,47 +28,61 @@ const parseUser = originalUser => {
     age,
     gender,
     profileImage: large,
+    matchScore: isEmpty(selectUser) ? -1 : matchScore({age, fullName: `${first} ${last}`}, selectUser ), 
   }
 }
 
 const calculateAge = dateOfBirth => {
-  const now = new Date()
-  return Math.floor(now.getFullYear() - dateOfBirth.getFullYear())
+  const ageDate = new Date(Date.now() - dateOfBirth.getTime())
+  return Math.abs(ageDate.getFullYear() - 1970)
 }
 
 const userReducer = (state = initialState, action) => {
   const { type, payload } = action
-  
 
   switch (type) {
     case USER.CREATE_USER:
-        const id = genrateUUID()
-        const age = calculateAge(payload.birthDate)
+        const createdUser = parseUser(payload, state.selectUser)
+
         return {
           ...state,
-          users: [...state.users, {...payload, id, age}],
+          users: [...state.users, createdUser],
         }
     case USER.CREATE_RANDOM_USER:
-        const newUser = parseUser(payload[0])
+        const newUser = parseRandomUser(payload[0], state.selectUser)
+
         return {
           ...state,
           users: [...state.users, newUser],
         }
     case USER.UPDATE_USER:
         const UpdatedUsers = state.users
-        const updatedAge = calculateAge(payload.birthDate)
-        UpdatedUsers[payload.userIndex] = {...payload, age:updatedAge}
+        UpdatedUsers[payload.userIndex] = parseUser(payload, state.selectUser)
+
         return {
           ...state,
           users: [...UpdatedUsers],
         }
     case USER.DELETE_USER:
       const newUsers = state.users
-      newUsers.splice(payload, 1); 
+      newUsers.splice(payload, 1)
+
       return {
         ...state,
         users: [...newUsers],
       }
+    case USER.SELECT_USER:
+        const selectUser = {...state.users[payload], matchScore: -1}
+        const reCalculatedUsers = state.users.map( user => {
+          const newMatchScore = user.id !== selectUser.id ? matchScore( user, selectUser ) : -1
+          return { ...user, matchScore: newMatchScore }
+        })
+
+        return {
+          ...state,
+          users: reCalculatedUsers,
+          selectUser: selectUser,
+        }
     default:
       return state
   }

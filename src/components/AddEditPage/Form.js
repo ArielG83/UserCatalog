@@ -48,7 +48,7 @@ const Form = ({user, submit}) => {
         setEmail(value)
 
         const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(value && value !== '' && regex.test(String(value).toLowerCase())){
+        if(value && value !== '' && !regex.test(String(value).toLowerCase())){
             setEmailError('Invalid Email')
         }else{
             setEmailError('')
@@ -77,7 +77,7 @@ const Form = ({user, submit}) => {
 
         if(!birthDate || birthDate === '' || birthDateError){
             valid = false
-            setValidationErrorMsg('Please select birthdate')
+            setValidationErrorMsg('Please select birth date')
             setBirthDateError(true)
         }
 
