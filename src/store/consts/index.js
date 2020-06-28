@@ -5,4 +5,4 @@ export const USER = Object.freeze({
   DELETE_USER: 'DELETE_USER',
   UPDATE_USER: 'UPDATE_USER',
   SELECT_USER: 'SELECT_USER',
-})
+});

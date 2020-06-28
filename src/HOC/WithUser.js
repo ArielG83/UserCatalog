@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import * as actionCreators from '../store/actions/userActions'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actionCreators from '../store/actions/userActions';
 
-const WithUser = WrappedComponent => {
+const WithUser = (WrappedComponent) => {
   class HocComp extends Component {
     render() {
-      return <WrappedComponent {...this.props} />
+      return <WrappedComponent {...this.props} />;
     }
   }
 
-  const mapStateToProps = ({ user }) => ({ ...user })
+  const mapStateToProps = ({ user }) => ({ ...user });
 
-  const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(actionCreators, dispatch)
-  })
+  const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators(actionCreators, dispatch),
+  });
 
-  return connect(mapStateToProps, mapDispatchToProps)(HocComp)
-}
+  return connect(mapStateToProps, mapDispatchToProps)(HocComp);
+};
 
-export default WithUser
+export default WithUser;

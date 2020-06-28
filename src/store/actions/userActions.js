@@ -1,68 +1,61 @@
-import { USER } from '../consts'
-import { getRandomUser } from '../../API/randomUser'
+import { USER } from '../consts';
+import { getRandomUser } from '../../API/randomUser';
 
-const createUser = user => async dispatch => {
+const createUser = (user) => async (dispatch) => {
   try {
     dispatch({
       type: USER.CREATE_USER,
       payload: user,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-const createRandomUser = () => async dispatch => {
+const createRandomUser = () => async (dispatch) => {
   try {
-    const data = await getRandomUser()
+    const data = await getRandomUser();
 
     dispatch({
       type: USER.CREATE_RANDOM_USER,
       payload: data,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-
-const updateUser = user => async dispatch => {
+const updateUser = (user) => async (dispatch) => {
   try {
     dispatch({
       type: USER.UPDATE_USER,
       payload: user,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-const deleteUser = index => async dispatch => {
+const deleteUser = (index) => async (dispatch) => {
   try {
     dispatch({
       type: USER.DELETE_USER,
       payload: index,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-const selectUser = index => async dispatch => {
+const selectUser = (index) => async (dispatch) => {
   try {
     dispatch({
       type: USER.SELECT_USER,
       payload: index,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-export {
-  createUser,
-  createRandomUser,
-  updateUser,
-  deleteUser,
-  selectUser,
-}
+export { createUser, createRandomUser, updateUser, deleteUser, selectUser };
